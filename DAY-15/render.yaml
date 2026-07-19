@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: cloudwatch-anomaly-predictor
+    env: python
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "cd backend && gunicorn --workers 1 --threads 2 app:app"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.8
+      - key: NODE_VERSION
+        value: 20
