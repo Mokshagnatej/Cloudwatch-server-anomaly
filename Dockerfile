@@ -33,12 +33,9 @@ RUN mkdir -p app/static/assets app/templates
 COPY --from=frontend-build /app/frontend/dist/assets/ app/static/assets/
 COPY --from=frontend-build /app/frontend/dist/index.html app/templates/index.html
 
-# Patch index.html for Flask (replaces the build.sh python script)
-RUN python3 -c "import re;\
-content = open('app/templates/index.html').read();\
-content = re.sub(r'src=\"/?assets/(.*?)\"', r'src=\"{{ url_for(\'static\', filename=\'assets/\1\') }}\"', content);\
-content = re.sub(r'href=\"/?assets/(.*?)\"', r'href=\"{{ url_for(\'static\', filename=\'assets/\1\') }}\"', content);\
-open('app/templates/index.html', 'w').write(content)"
+# Patch index.html for Flask
+COPY DAY-15/backend/patch_index.py .
+RUN python3 patch_index.py
 
 # Set environment variables for runtime
 ENV PYTHONPATH=/app/backend
