@@ -194,7 +194,7 @@ def register():
         return jsonify({"error": "An account with this email already exists"}), 409
 
     try:
-        new_user = User(email=email, role='admin', status='active')
+        new_user = User(email=email, role='viewer', status='active')
         new_user.set_password(password)
         db.session.add(new_user)
         db.session.commit()
