@@ -4,9 +4,7 @@ set -o errexit
 
 echo "Installing backend dependencies..."
 cd backend
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+pip install --target=./pkgs -r requirements.txt
 
 echo "Building frontend..."
 cd ../frontend
