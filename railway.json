@@ -5,6 +5,6 @@
     "buildCommand": "cd DAY-15 && ./build.sh"
   },
   "deploy": {
-    "startCommand": "cd DAY-15/backend && gunicorn --workers 1 --threads 2 --bind 0.0.0.0:$PORT app:app"
+    "startCommand": "cd DAY-15/backend && python -m gunicorn --workers 1 --threads 2 --bind 0.0.0.0:$PORT app:app"
   }
 }
