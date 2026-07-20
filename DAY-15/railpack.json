@@ -1,4 +1,5 @@
 {
+  "providers": ["python", "node"],
   "packages": {
     "python": "3.11.8",
     "node": "20"
