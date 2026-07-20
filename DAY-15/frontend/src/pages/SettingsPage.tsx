@@ -10,16 +10,17 @@ export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<TabId>("aws");
   const [saved, setSaved] = useState(false);
 
-  // Route Protection: Prevent Viewers from accessing Settings
+  const [isViewer, setIsViewer] = useState(false);
+
   useEffect(() => {
     const userStr = localStorage.getItem("user");
     if (userStr) {
       const user = JSON.parse(userStr);
       if (user.role === 'viewer') {
-        navigate("/dashboard", { replace: true });
+        setIsViewer(true);
       }
     }
-  }, [navigate]);
+  }, []);
 
   const handleSave = () => {
     setSaved(true);
@@ -42,7 +43,14 @@ export default function SettingsPage() {
         animate={{ opacity: 1, y: 0 }}
         className="mb-8"
       >
-        <h1 className="text-3xl font-bold text-white mb-2">Platform Settings</h1>
+        <div className="flex items-center gap-4 mb-2">
+          <h1 className="text-3xl font-bold text-white">Platform Settings</h1>
+          {isViewer && (
+            <span className="px-3 py-1 bg-slate-500/10 border border-slate-500/30 text-slate-400 rounded-full text-xs font-bold uppercase tracking-wider">
+              Viewer Mode (Read-Only)
+            </span>
+          )}
+        </div>
         <p className="text-slate-400">Configure your integrations, alerts, and system preferences.</p>
       </motion.div>
       
@@ -92,12 +100,12 @@ export default function SettingsPage() {
               transition={{ duration: 0.2 }}
               className="relative z-10"
             >
-              {activeTab === "aws" && <AwsSettings />}
-              {activeTab === "alerts" && <AlertSettings />}
-              {activeTab === "models" && <ModelSettings />}
-              {activeTab === "users" && <UserSettings />}
-              {activeTab === "billing" && <BillingSettings />}
-              {activeTab === "security" && <SecuritySettings />}
+              {activeTab === "aws" && <AwsSettings isViewer={isViewer} />}
+              {activeTab === "alerts" && <AlertSettings isViewer={isViewer} />}
+              {activeTab === "models" && <ModelSettings isViewer={isViewer} />}
+              {activeTab === "users" && <UserSettings isViewer={isViewer} />}
+              {activeTab === "billing" && <BillingSettings isViewer={isViewer} />}
+              {activeTab === "security" && <SecuritySettings isViewer={isViewer} />}
             </motion.div>
           </AnimatePresence>
 
@@ -105,7 +113,9 @@ export default function SettingsPage() {
           <div className="absolute bottom-0 left-0 w-full p-6 border-t border-white/5 bg-[#0d1117]/80 backdrop-blur-md flex justify-end">
             <button 
               onClick={handleSave}
+              disabled={isViewer}
               className={`flex items-center gap-2 px-6 py-2.5 rounded-lg font-medium transition-all ${
+                isViewer ? "bg-slate-700 text-slate-500 cursor-not-allowed" :
                 saved 
                   ? "bg-[#34d399]/20 text-[#34d399] border border-[#34d399]/50" 
                   : "bg-[#00d9ff] text-[#080b12] hover:shadow-[0_0_20px_-5px_#00d9ff]"
@@ -123,7 +133,7 @@ export default function SettingsPage() {
 
 // --- Sub-components for each Settings Tab ---
 
-function AwsSettings() {
+function AwsSettings({ isViewer }: { isViewer: boolean }) {
   return (
     <div className="pb-20 space-y-6">
       <div>
@@ -137,7 +147,8 @@ function AwsSettings() {
           <input 
             type="text" 
             defaultValue="AKIAIOSFODNN7EXAMPLE" 
-            className="w-full bg-[#080b12] border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-[#00d9ff] focus:ring-1 focus:ring-[#00d9ff] transition-all font-mono text-sm"
+            disabled={isViewer}
+            className="w-full bg-[#080b12] border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-[#00d9ff] focus:ring-1 focus:ring-[#00d9ff] transition-all font-mono text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           />
         </div>
         <div>
@@ -145,12 +156,13 @@ function AwsSettings() {
           <input 
             type="password" 
             defaultValue="wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" 
-            className="w-full bg-[#080b12] border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-[#00d9ff] focus:ring-1 focus:ring-[#00d9ff] transition-all font-mono text-sm"
+            disabled={isViewer}
+            className="w-full bg-[#080b12] border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-[#00d9ff] focus:ring-1 focus:ring-[#00d9ff] transition-all font-mono text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           />
         </div>
         <div>
           <label className="block text-sm font-medium text-slate-300 mb-2">Default Region</label>
-          <select className="w-full bg-[#080b12] border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-[#00d9ff] transition-all appearance-none">
+          <select disabled={isViewer} className="w-full bg-[#080b12] border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-[#00d9ff] transition-all appearance-none disabled:opacity-50 disabled:cursor-not-allowed">
             <option>us-east-1 (N. Virginia)</option>
             <option>eu-west-1 (Ireland)</option>
             <option>ap-northeast-1 (Tokyo)</option>
@@ -161,7 +173,7 @@ function AwsSettings() {
   );
 }
 
-function AlertSettings() {
+function AlertSettings({ isViewer }: { isViewer: boolean }) {
   const [alerts, setAlerts] = useState([
     { id: 1, name: "Slack Integration", desc: "Send alerts to #ops-alerts", active: true },
     { id: 2, name: "PagerDuty", desc: "Trigger high-priority incidents", active: true },
@@ -184,8 +196,8 @@ function AlertSettings() {
         {alerts.map((alert) => (
           <div 
             key={alert.id} 
-            onClick={() => toggleAlert(alert.id)}
-            className="flex items-center justify-between p-4 bg-[#080b12] border border-white/5 rounded-xl cursor-pointer hover:bg-white/[0.02] transition-colors"
+            onClick={() => !isViewer && toggleAlert(alert.id)}
+            className={`flex items-center justify-between p-4 bg-[#080b12] border border-white/5 rounded-xl transition-colors ${isViewer ? 'opacity-75 cursor-not-allowed' : 'cursor-pointer hover:bg-white/[0.02]'}`}
           >
             <div>
               <h3 className="text-white font-medium">{alert.name}</h3>
@@ -201,7 +213,7 @@ function AlertSettings() {
   );
 }
 
-function ModelSettings() {
+function ModelSettings({ isViewer }: { isViewer: boolean }) {
   const [sensitivity, setSensitivity] = useState(85);
   const [autoRetrain, setAutoRetrain] = useState(true);
 
@@ -228,12 +240,13 @@ function ModelSettings() {
             max="100" 
             value={sensitivity}
             onChange={(e) => setSensitivity(parseInt(e.target.value))}
-            className="w-full accent-[#00d9ff]" 
+            disabled={isViewer}
+            className="w-full accent-[#00d9ff] disabled:opacity-50 disabled:cursor-not-allowed" 
           />
           <p className="text-xs text-slate-500 mt-2">Higher sensitivity detects more anomalies but may increase false positives.</p>
         </div>
 
-        <div className="flex items-center justify-between p-4 bg-[#080b12] border border-white/5 rounded-xl cursor-pointer hover:bg-white/[0.02] transition-colors" onClick={() => setAutoRetrain(!autoRetrain)}>
+        <div className={`flex items-center justify-between p-4 bg-[#080b12] border border-white/5 rounded-xl transition-colors ${isViewer ? 'opacity-75 cursor-not-allowed' : 'cursor-pointer hover:bg-white/[0.02]'}`} onClick={() => !isViewer && setAutoRetrain(!autoRetrain)}>
           <div>
             <h3 className="text-white font-medium">Auto-Retraining</h3>
             <p className="text-sm text-slate-400">Retrain models weekly on new telemetry data</p>
@@ -247,7 +260,7 @@ function ModelSettings() {
   );
 }
 
-function UserSettings() {
+function UserSettings({ isViewer }: { isViewer: boolean }) {
   const [users, setUsers] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -340,12 +353,14 @@ function UserSettings() {
           <h2 className="text-xl font-semibold text-white mb-1">User Management</h2>
           <p className="text-slate-400 text-sm mb-6">Manage team access and RBAC roles.</p>
         </div>
-        <button 
-          onClick={() => setShowInviteForm(!showInviteForm)}
-          className="px-4 py-2 border border-white/10 rounded-lg text-sm text-white hover:bg-white/5 transition-colors"
-        >
-          {showInviteForm ? "Cancel" : "+ Invite Team Member"}
-        </button>
+        {!isViewer && (
+          <button 
+            onClick={() => setShowInviteForm(!showInviteForm)}
+            className="px-4 py-2 border border-white/10 rounded-lg text-sm text-white hover:bg-white/5 transition-colors"
+          >
+            {showInviteForm ? "Cancel" : "+ Invite Team Member"}
+          </button>
+        )}
       </div>
 
       <AnimatePresence>
@@ -419,9 +434,11 @@ function UserSettings() {
                   </span>
                 </td>
                 <td className="px-6 py-4 text-right">
-                  <button onClick={() => removeUser(user.id)} className="text-sm text-red-400 opacity-0 group-hover:opacity-100 transition-opacity hover:underline">
-                    Remove
-                  </button>
+                  {!isViewer && (
+                    <button onClick={() => removeUser(user.id)} className="text-sm text-red-400 opacity-0 group-hover:opacity-100 transition-opacity hover:underline">
+                      Remove
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
@@ -446,7 +463,7 @@ function UserSettings() {
   );
 }
 
-function SecuritySettings() {
+function SecuritySettings({ isViewer }: { isViewer: boolean }) {
   const [require2FA, setRequire2FA] = useState(true);
   const [timeout, setTimeoutVal] = useState("1 Hour");
 
@@ -459,8 +476,8 @@ function SecuritySettings() {
 
       <div className="space-y-4 max-w-2xl">
         <div 
-          onClick={() => setRequire2FA(!require2FA)}
-          className="flex items-center justify-between p-4 bg-[#080b12] border border-white/5 rounded-xl cursor-pointer hover:bg-white/[0.02] transition-colors"
+          onClick={() => !isViewer && setRequire2FA(!require2FA)}
+          className={`flex items-center justify-between p-4 bg-[#080b12] border border-white/5 rounded-xl transition-colors ${isViewer ? 'opacity-75 cursor-not-allowed' : 'cursor-pointer hover:bg-white/[0.02]'}`}
         >
           <div>
             <h3 className="text-white font-medium">Require Two-Factor Auth (2FA)</h3>
@@ -476,7 +493,8 @@ function SecuritySettings() {
           <select 
             value={timeout}
             onChange={(e) => setTimeoutVal(e.target.value)}
-            className="w-full bg-[#0d1117] border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-[#00d9ff]"
+            disabled={isViewer}
+            className="w-full bg-[#0d1117] border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-[#00d9ff] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <option>15 Minutes</option>
             <option>30 Minutes</option>
@@ -500,7 +518,7 @@ interface Expense {
   description: string;
 }
 
-function BillingSettings() {
+function BillingSettings({ isViewer }: { isViewer: boolean }) {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -564,12 +582,14 @@ function BillingSettings() {
           <p className="text-slate-400 text-sm">Track and manage your AWS usage costs and ML inference expenses.</p>
         </div>
         
-        <button 
-          onClick={() => setShowAddForm(!showAddForm)}
-          className="flex items-center gap-2 px-4 py-2 border border-white/10 rounded-lg text-sm text-white hover:bg-white/5 transition-colors"
-        >
-          {showAddForm ? "Cancel" : <><Plus className="w-4 h-4" /> Log Expense</>}
-        </button>
+        {!isViewer && (
+          <button 
+            onClick={() => setShowAddForm(!showAddForm)}
+            className="flex items-center gap-2 px-4 py-2 border border-white/10 rounded-lg text-sm text-white hover:bg-white/5 transition-colors"
+          >
+            {showAddForm ? "Cancel" : <><Plus className="w-4 h-4" /> Log Expense</>}
+          </button>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 max-w-4xl">

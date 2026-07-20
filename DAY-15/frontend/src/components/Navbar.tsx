@@ -18,8 +18,8 @@ export default function Navbar() {
     { name: "Settings", path: "/settings", icon: <Settings className="w-4 h-4" /> },
   ];
 
-  // Filter out settings for viewers
-  const navItems = isViewer ? allNavItems.filter(item => item.name !== "Settings") : allNavItems;
+  // Allow all roles to see settings
+  const navItems = allNavItems;
 
   return (
     <nav className="fixed top-0 w-full z-50 bg-[#0d1117]/80 backdrop-blur-md border-b border-white/5">
