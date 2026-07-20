@@ -254,7 +254,7 @@ function UserSettings() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8081/api/users");
+        const response = await fetch("/api/users");
         if (response.ok) {
           const data = await response.json();
           setUsers(data);
@@ -283,7 +283,7 @@ function UserSettings() {
     setInviteError("");
 
     try {
-      const response = await fetch("http://127.0.0.1:8081/api/invite", {
+      const response = await fetch("/api/invite", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -319,7 +319,7 @@ function UserSettings() {
 
   const removeUser = async (id: number) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8081/api/users/${id}`, {
+      const response = await fetch(`/api/users/${id}`, {
         method: "DELETE"
       });
       if (response.ok) {
