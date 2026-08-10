@@ -1,6 +1,19 @@
-# DAY-15 — CloudWatch Server Resource Anomaly Predictor
+# CloudWatch Server Resource Anomaly Predictor (DAY-15)
 
-A fully integrated full-stack application featuring a dark ops-center dashboard with live metric streaming, iOS-style toggle switches, and a reactive ML Predictor Engine powered by a Flask backend.
+**A Next-Generation, AI-Powered Ops-Center Dashboard for Real-Time Infrastructure Monitoring**
+
+The CloudWatch Server Resource Anomaly Predictor is a fully integrated full-stack application designed to proactively detect, visualize, and manage server anomalies before they cause critical downtime. By combining live metric streaming with a reactive Machine Learning Predictor Engine (Random Forest), this platform transforms raw server data into actionable intelligence.
+
+---
+
+## 🌟 Project Impact & Value Proposition
+
+In modern cloud infrastructure, reactive monitoring is no longer enough. This project bridges the gap between traditional monitoring and intelligent observability by offering:
+
+- **Proactive Anomaly Detection:** Powered by a Machine Learning Engine, the system identifies subtle anomalies in CPU, Memory, Disk, and Network usage patterns that static thresholds often miss, enabling preemptive action and reducing downtime.
+- **Immersive Ops-Center Experience:** A dark-mode, edge-to-edge dashboard provides DevOps and SRE teams with a noise-free, high-fidelity view of server health across multiple AWS regions in real-time.
+- **Seamless Decoupled Architecture:** Built with a modern Vite/React SPA frontend and a robust Flask backend, the architecture ensures that the UI remains blazing fast and perfectly synchronized with the Python-based predictive models.
+- **Automated Security & Onboarding:** Features dynamic user invitations via automated SMTP emails, secure SQLite session management with hashed passwords, and real-time CRUD user management.
 
 ---
 
