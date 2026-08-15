@@ -219,25 +219,28 @@ def predict():
             
             # Automatically log this anomaly to the Server Metrics DB if auto-detect is ON
             try:
-                conn = get_resources_db_connection()
-                row = conn.execute('SELECT value FROM settings WHERE key="auto_detect"').fetchone()
-                auto_detect_enabled = True if row and row['value'] == 'true' else False
+                setting = SystemSettings.query.filter_by(key='auto_detect').first()
+                auto_detect_enabled = setting.value == 'true' if setting else True
                 
                 if auto_detect_enabled:
-                    timestamp = datetime.datetime.now().isoformat()
                     # Generate realistic "high load" metrics for the anomaly
                     cpu_usage = round(85.0 + (np.random.rand() * 14.9), 1) # 85% to 99.9%
                     memory_usage = round(12.0 + (np.random.rand() * 4.0), 1) # 12GB to 16GB
                     network_io = round(150.0 + (np.random.rand() * 100.0), 1) # High network
                     disk_io = round(80.0 + (np.random.rand() * 50.0), 1) # High disk
                     
-                    conn.execute(
-                        'INSERT INTO resource_metrics (model_name, cpu_usage, memory_usage, network_io, disk_io, anomaly_detected, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?)',
-                        ("Live Telemetry Model", cpu_usage, memory_usage, network_io, disk_io, True, timestamp)
+                    new_metric = ResourceMetric(
+                        model_name="Live Telemetry Model",
+                        cpu_usage=cpu_usage,
+                        memory_usage=memory_usage,
+                        network_io=network_io,
+                        disk_io=disk_io,
+                        anomaly_detected=True
                     )
-                    conn.commit()
-                conn.close()
+                    db.session.add(new_metric)
+                    db.session.commit()
             except Exception as db_err:
+                db.session.rollback()
                 print("Failed to auto-log anomaly:", db_err)
                 
         else:
