@@ -323,6 +323,9 @@ function UserSettings({ isViewer }: { isViewer: boolean }) {
       setNewUserEmail("");
       setNewUserRole("Viewer");
       setShowInviteForm(false);
+      if (data.message) {
+        alert(data.message);
+      }
     } catch (err: any) {
       setInviteError(err.message);
     } finally {

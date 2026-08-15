@@ -5,8 +5,7 @@ import pickle
 import numpy as np
 import os
 import secrets
-from flask_mail import Message
-from app import db, mail
+from app import db
 from app.models import User, ResourceMetric, SystemSettings
 
 bp = Blueprint('main', __name__)
@@ -95,28 +94,11 @@ def invite_user():
         db.session.add(new_user)
         db.session.commit()
         
-        # Send invitation email
-        invite_link = f"http://localhost:5173/login?email={email}"
-        msg = Message("You've been invited to CloudWatch Anomaly Predictor!", recipients=[email])
-        msg.html = f"""
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #080b12; color: #fff; border-radius: 10px;">
-            <h2 style="color: #00d9ff; text-align: center;">Welcome to CloudWatch Anomaly Predictor</h2>
-            <p style="color: #ccc; font-size: 16px;">You have been invited to join the team as a <strong>{role.title()}</strong>.</p>
-            <p style="color: #ccc; font-size: 16px;">Your temporary password is: <span style="background-color: #1e293b; padding: 5px 10px; border-radius: 5px; font-family: monospace; color: #fff;">{temp_password}</span></p>
-            <div style="text-align: center; margin: 30px 0;">
-                <a href="{invite_link}" style="background-color: #00d9ff; color: #080b12; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 16px;">Sign In Now</a>
-            </div>
-            <p style="color: #888; font-size: 12px; text-align: center;">Please change your password after your first login.</p>
-        </div>
-        """
+        # Send invitation email (Removed)
+        # invite_link = f"http://localhost:5173/login?email={email}"
+        # msg = ... (Removed)
         
-        try:
-            mail.send(msg)
-        except Exception as mail_err:
-            print("Failed to send email:", mail_err)
-            return jsonify({"error": "User created but email failed to send. Please check your SMTP configuration."}), 500
-
-        return jsonify({"status": "success", "message": f"Invitation sent successfully to {email}"}), 201
+        return jsonify({"status": "success", "message": f"User created successfully. Temporary password: {temp_password}"}), 201
 
     except Exception as e:
         db.session.rollback()
