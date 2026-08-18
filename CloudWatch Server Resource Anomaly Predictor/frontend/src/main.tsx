@@ -5,7 +5,7 @@
   import "./styles/index.css";
 
   createRoot(document.getElementById("root")!).render(
-    <BrowserRouter>
+    <BrowserRouter basename="/Cloudwatch-server-anomaly/">
       <App />
     </BrowserRouter>
   );
