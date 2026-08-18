@@ -11,6 +11,7 @@ export default function Navbar() {
   const isViewer = user?.role === 'viewer';
   
   const allNavItems = [
+    { name: "Projects", path: "/cloudwatch-server-anomaly", icon: <DollarSign className="w-4 h-4" /> },
     { name: "Live Telemetry", path: "/dashboard", icon: <Activity className="w-4 h-4" /> },
     { name: "ML Models", path: "/models", icon: <Shield className="w-4 h-4" /> },
     { name: "Databases", path: "/databases", icon: <Database className="w-4 h-4" /> },
