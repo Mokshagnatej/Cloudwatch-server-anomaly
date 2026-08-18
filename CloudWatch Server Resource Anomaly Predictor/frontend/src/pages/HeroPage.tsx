@@ -108,6 +108,12 @@ export default function HeroPage() {
               Seamlessly integrate with AWS CloudWatch to monitor EC2 instances, RDS databases, 
               and auto-scaling groups in real-time. Catch resource anomalies before they trigger outages.
             </motion.p>
+            <Link
+              to="/cloudwatch-server-anomaly"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00d9ff]/10 border border-[#00d9ff]/20 text-[#00d9ff] hover:bg-[#00d9ff]/20 transition-colors"
+            >
+              View Projects
+            </Link>
           </div>
 
           {/* Right Column: Login Card */}

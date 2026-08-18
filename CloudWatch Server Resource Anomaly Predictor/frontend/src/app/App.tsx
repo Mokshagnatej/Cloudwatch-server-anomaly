@@ -6,12 +6,14 @@ import ModelsPage from "../pages/ModelsPage";
 import SettingsPage from "../pages/SettingsPage";
 import DatabasePage from "../pages/DatabasePage";
 import ResourcesPage from "../pages/ResourcesPage";
+import CloudwatchServerAnomalyPage from "../pages/CloudwatchServerAnomalyPage";
 import Layout from "../components/Layout";
 
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<HeroPage />} />
+      <Route path="/cloudwatch-server-anomaly" element={<CloudwatchServerAnomalyPage />} />
       <Route path="/request-access" element={<RequestAccessPage />} />
       <Route element={<Layout />}>
         <Route path="/dashboard" element={<Dashboard />} />

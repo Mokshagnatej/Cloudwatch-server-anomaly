@@ -88,6 +88,9 @@ DAY-15/
    npm run dev
    ```
    *You can view the dashboard by opening `http://localhost:5173` in your browser.*
+   
+   **Quick Access (Live Route):**
+   - Projects page: [http://localhost:5173/cloudwatch-server-anomaly](http://localhost:5173/cloudwatch-server-anomaly)
 
 2. **Updating the Frontend (Figma Exports)**
    If you make updates to the Figma design and export a new codebase, extract the `.zip` contents directly into the `frontend/` folder, then rebuild the assets:
