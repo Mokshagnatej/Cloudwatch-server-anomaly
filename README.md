@@ -1,5 +1,7 @@
 # CloudWatch Server Resource Anomaly Predictor (DAY-15)
 
+**Live Demo (Frontend Only):** [https://Mokshagnatej.github.io/Cloudwatch-server-anomaly/](https://Mokshagnatej.github.io/Cloudwatch-server-anomaly/)
+
 **A Next-Generation, AI-Powered Ops-Center Dashboard for Real-Time Infrastructure Monitoring**
 
 The CloudWatch Server Resource Anomaly Predictor is a fully integrated full-stack application designed to proactively detect, visualize, and manage server anomalies before they cause critical downtime. By combining live metric streaming with a reactive Machine Learning Predictor Engine (Random Forest), this platform transforms raw server data into actionable intelligence.
